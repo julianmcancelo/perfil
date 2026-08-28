@@ -13,12 +13,19 @@ export interface EnlaceSocial {
   href: string;
 }
 
+export interface EnlaceProyecto {
+  tipo: "play" | "apple" | "web" | "enlace";
+  etiqueta: string;
+  href: string;
+}
+
 export interface Proyecto {
   nombre: string;
   sigla?: string;
   descripcion: string;
   etiquetas?: string[];
   href?: string;
+  enlaces?: EnlaceProyecto[];
   destacado?: string;
 }
 
@@ -103,11 +110,22 @@ export const perfil: Perfil = {
     {
       nombre: "Bitácora Docente",
       sigla: "BD",
-      destacado: "App educativa",
+      destacado: "En Google Play",
       descripcion:
-        "Aplicación móvil de gestión académica para docentes: instituciones, cursos, estudiantes, asistencias, actividades y calificaciones desde un único lugar. Incluye baja lógica y traslado de estudiantes entre cursos con historial auditable. En desarrollo.",
+        "Aplicación móvil de gestión académica para docentes: instituciones, cursos, estudiantes, asistencias, actividades y calificaciones desde un único lugar. Incluye baja lógica y traslado de estudiantes entre cursos con historial auditable.",
       etiquetas: ["Flutter", "Dart", "Firebase", "Riverpod"],
-      href: undefined, // repositorio privado
+      enlaces: [
+        {
+          tipo: "play",
+          etiqueta: "Google Play",
+          href: "https://play.google.com/store/apps/details?id=com.carpetadigital.app",
+        },
+        {
+          tipo: "web",
+          etiqueta: "Versión web",
+          href: "https://app.bitacoradocente.com.ar",
+        },
+      ],
     },
     {
       nombre: "Aura Fitness",

@@ -82,7 +82,41 @@ const { proyectos } = Astro.props;
             </div>
 
             <div class="tarjeta__pie tarjeta__solo-activa">
-              {p.href ? (
+              {p.enlaces && p.enlaces.length > 0 ? (
+                <div class="tienda">
+                  {p.enlaces.map((e) => (
+                    <a
+                      class="tienda__btn"
+                      href={e.href}
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      <svg
+                        class="tienda__glifo"
+                        viewBox="0 0 16 16"
+                        width="13"
+                        height="13"
+                        aria-hidden="true"
+                      >
+                        {e.tipo === "play" && <path d="M3 1.8v12.4l10.5-6.2z" fill="currentColor" />}
+                        {e.tipo === "apple" && (
+                          <path
+                            d="M11 8.5c0-1.9 1.5-2.8 1.6-2.9-.9-1.3-2.2-1.4-2.7-1.5-1.1-.1-2.2.7-2.8.7-.6 0-1.5-.7-2.4-.6-1.2 0-2.3.7-3 1.8-1.3 2.2-.3 5.6 1 7.4.6.9 1.4 1.9 2.4 1.9 1 0 1.3-.6 2.5-.6s1.5.6 2.5.6c1 0 1.7-.9 2.3-1.8.4-.6.7-1.2.9-1.9-.1 0-1.8-.7-1.8-2.6zM9.4 3.6c.5-.7.9-1.6.8-2.6-.8 0-1.7.5-2.3 1.2-.5.6-.9 1.5-.8 2.4.9.1 1.8-.4 2.3-1z"
+                            fill="currentColor"
+                          />
+                        )}
+                        {e.tipo !== "play" && e.tipo !== "apple" && (
+                          <g fill="none" stroke="currentColor" stroke-width="1.3">
+                            <circle cx="8" cy="8" r="6" />
+                            <path d="M2 8h12M8 2c2 2.2 2 9.8 0 12M8 2c-2 2.2-2 9.8 0 12" />
+                          </g>
+                        )}
+                      </svg>
+                      <span>{e.etiqueta}</span>
+                    </a>
+                  ))}
+                </div>
+              ) : p.href ? (
                 <a
                   class="arrow-link"
                   href={p.href}
@@ -224,7 +258,7 @@ const { proyectos } = Astro.props;
 
   /* Con JS: pila superpuesta. */
   .deck--listo {
-    height: 21rem;
+    height: 22.5rem;
     -webkit-mask-image: linear-gradient(
       90deg,
       transparent 0,
@@ -257,6 +291,7 @@ const { proyectos } = Astro.props;
     left: 50%;
     width: min(100%, 21rem);
     height: 100%;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     transform: translateX(-50%);
@@ -399,12 +434,49 @@ const { proyectos } = Astro.props;
     -webkit-box-orient: vertical;
   }
 
+  .deck--listo .tarjeta__desc {
+    -webkit-line-clamp: 4;
+  }
+
   .tarjeta__pie {
     padding-top: 1.1rem;
   }
 
   .tarjeta__nota {
     color: var(--color-faint);
+  }
+
+  .tienda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .tienda__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: var(--color-text);
+    color: var(--color-bg);
+    border: 1px solid var(--color-text);
+    border-radius: 6px;
+    padding: 0.3rem 0.55rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .tienda__btn:hover {
+    background: transparent;
+    color: var(--color-text);
+  }
+
+  .tienda__glifo {
+    flex-shrink: 0;
   }
 
   /* --- Indicadores ---------------------------------- */
@@ -444,7 +516,7 @@ const { proyectos } = Astro.props;
       --rot: 3.5deg;
     }
     .deck--listo {
-      height: 23rem;
+      height: 24.5rem;
     }
     .deck--listo .tarjeta {
       width: min(100%, 17rem);
