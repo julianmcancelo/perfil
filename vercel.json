@@ -4,5 +4,13 @@
   "buildCommand": "astro build",
   "outputDirectory": "dist",
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.juliancancelo.com.ar" }],
+      "destination": "https://juliancancelo.com.ar/:path*",
+      "permanent": true
+    }
+  ]
 }
