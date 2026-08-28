@@ -2,6 +2,7 @@
 import Base from "../layouts/Base.astro";
 import Sidebar from "../components/Sidebar.astro";
 import Section from "../components/Section.astro";
+import Proyectos from "../components/Proyectos.astro";
 import { perfil } from "../data/perfil.ts";
 
 const navItems = [
@@ -57,33 +58,7 @@ const tituloPagina = `${perfil.nombre} — ${perfil.titular}`;
         </header>
 
         {/* ----------------------------------------------- Proyectos */}
-        <Section numero="01" titulo="proyectos" ancla="proyectos">
-          <ul class="list">
-            {
-              perfil.proyectos.map((p) => (
-                <li class="entry">
-                  {p.etiquetas && p.etiquetas.length > 0 && (
-                    <p class="entry__tags">
-                      {p.etiquetas.map((t) => (
-                        <span class="tag">{t}</span>
-                      ))}
-                    </p>
-                  )}
-                  <h3 class="entry__title mono">
-                    {p.href ? (
-                      <a class="entry__link" href={p.href} target="_blank" rel="noopener">
-                        {p.nombre}
-                      </a>
-                    ) : (
-                      p.nombre
-                    )}
-                  </h3>
-                  <p class="entry__desc">{p.descripcion}</p>
-                </li>
-              ))
-            }
-          </ul>
-        </Section>
+        <Proyectos proyectos={perfil.proyectos} />
 
         {/* --------------------------------------------- Experiencia */}
         <Section numero="02" titulo="experiencia" ancla="experiencia">

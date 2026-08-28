@@ -15,9 +15,11 @@ export interface EnlaceSocial {
 
 export interface Proyecto {
   nombre: string;
+  sigla?: string;
   descripcion: string;
   etiquetas?: string[];
   href?: string;
+  destacado?: string;
 }
 
 export interface Experiencia {
@@ -73,13 +75,17 @@ export const perfil: Perfil = {
   proyectos: [
     {
       nombre: "SiGIC",
+      sigla: "Si",
+      destacado: "En producción",
       descripcion:
-        "Sistema de Gestión Integral de Colación y Ceremonias, en producción. Cubre el ciclo completo de un acto de colación: padrón de graduados, autogestión de invitados, editor visual de anfiteatro con asignación de butacas en tiempo real, acreditación por QR y matriz de autorizaciones de portería. Proyecto final del Instituto Tecnológico Beltrán.",
+        "Sistema de Gestión Integral de Colación y Ceremonias. Cubre el ciclo completo de un acto de colación: padrón de graduados, autogestión de invitados, editor visual de anfiteatro con asignación de butacas en tiempo real, acreditación por QR y matriz de autorizaciones de portería. Proyecto final del Instituto Tecnológico Beltrán.",
       etiquetas: ["Next.js", "PostgreSQL", "Flutter", "Vercel"],
       href: "https://sigic-one.vercel.app",
     },
     {
       nombre: "Kipi",
+      sigla: "Ki",
+      destacado: "Web 3D en tiempo real",
       descripcion:
         "Aplicación web de modelado 3D paramétrico en tiempo real para fabricación aditiva FDM. Genera llaveros y tarjetas con cavidades calibradas para etiquetas NFC, vectoriza logotipos a partir de imágenes y asigna filamentos para sistemas multicolor como Bambu Lab AMS.",
       etiquetas: ["Next.js", "Three.js", "TypeScript", "Tailwind CSS"],
@@ -87,6 +93,8 @@ export const perfil: Perfil = {
     },
     {
       nombre: "Grana 3D",
+      sigla: "G3",
+      destacado: "App de gestión",
       descripcion:
         "Aplicación de gestión para un taller de impresión 3D: ventas, stock, catálogo de productos y eventos. El control de acceso por roles se resuelve íntegramente en las reglas de seguridad de Firestore, sin servidor propio.",
       etiquetas: ["React Native", "Expo", "TypeScript", "Firebase"],
@@ -94,6 +102,8 @@ export const perfil: Perfil = {
     },
     {
       nombre: "Bitácora Docente",
+      sigla: "BD",
+      destacado: "App educativa",
       descripcion:
         "Aplicación móvil de gestión académica para docentes: instituciones, cursos, estudiantes, asistencias, actividades y calificaciones desde un único lugar. Incluye baja lógica y traslado de estudiantes entre cursos con historial auditable. En desarrollo.",
       etiquetas: ["Flutter", "Dart", "Firebase", "Riverpod"],
@@ -101,13 +111,17 @@ export const perfil: Perfil = {
     },
     {
       nombre: "Aura Fitness",
+      sigla: "AF",
+      destacado: "En desarrollo",
       descripcion:
-        "Aplicación de entrenamiento con rutinas, seguimiento de progreso y registro de ayunos, integrada con Health Connect. En desarrollo.",
+        "Aplicación de entrenamiento con rutinas, seguimiento de progreso y registro de ayunos, integrada con Health Connect.",
       etiquetas: ["Flutter", "Dart", "Health Connect"],
       href: undefined, // repositorio privado
     },
     {
       nombre: "@jcancelo/google-wallet",
+      sigla: "GW",
+      destacado: "Librería",
       descripcion:
         "Librería tipada, con API en español, para crear, firmar criptográficamente y emitir pases de Google Wallet (entradas, credenciales y tarjetas de fidelidad) desde Node.js, Next.js y React, sin gestionar manualmente la firma JWT RS256. Incluye componente de botón para React.",
       etiquetas: ["TypeScript", "Node.js", "React"],
