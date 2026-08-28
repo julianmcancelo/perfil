@@ -1,0 +1,39 @@
+---
+import Base from "../layouts/Base.astro";
+import { perfil } from "../data/perfil.ts";
+---
+
+<Base
+  title={`Página no encontrada — ${perfil.nombre}`}
+  description="La página solicitada no existe o fue movida."
+>
+  <main class="error" id="contenido">
+    <p class="label">Error 404</p>
+    <h1 class="error__title mono">Página no encontrada</h1>
+    <p class="error__text">
+      La dirección que ingresaste no existe o fue movida. Podés volver al inicio.
+    </p>
+    <a class="arrow-link" href="/">Volver al inicio</a>
+  </main>
+</Base>
+
+<style>
+  .error {
+    max-width: var(--content-w);
+    margin: 0 auto;
+    padding: 8rem 1.5rem;
+  }
+
+  .error__title {
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    margin: 0.75rem 0 1rem;
+  }
+
+  .error__text {
+    color: var(--color-muted);
+    margin-bottom: 2rem;
+    max-width: 30rem;
+  }
+</style>

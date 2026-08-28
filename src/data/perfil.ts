@@ -27,7 +27,7 @@ export interface Experiencia {
   detalle?: string;
 }
 
-export interface GrupoStack {
+export interface GrupoTecnologias {
   titulo: string;
   items: string[];
 }
@@ -48,7 +48,7 @@ export interface Perfil {
   sociales: EnlaceSocial[];
   proyectos: Proyecto[];
   experiencia: Experiencia[];
-  stack: GrupoStack[];
+  tecnologias: GrupoTecnologias[];
   certificaciones: Certificacion[];
   lema?: string;
 }
@@ -142,7 +142,7 @@ export const perfil: Perfil = {
         "Seguridad ofensiva y defensiva, análisis de redes y evaluación de vulnerabilidades.",
     },
   ],
-  stack: [
+  tecnologias: [
     {
       titulo: "Lenguajes",
       items: ["TypeScript", "JavaScript", "Dart", "Python", "PHP", "C#"],

@@ -1,24 +1,73 @@
 ---
 import "../styles/global.css";
+import { perfil } from "../data/perfil.ts";
 
 interface Props {
   title: string;
   description?: string;
 }
 
-const { title, description = "" } = Astro.props;
+const { title, description = perfil.presentacion[0] } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL("/og.svg", Astro.site).href;
+
+// Datos estructurados (schema.org/Person) para buscadores.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: perfil.nombre,
+  jobTitle: perfil.titular,
+  email: `mailto:${perfil.email}`,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Lanús",
+    addressRegion: "Buenos Aires",
+    addressCountry: "AR",
+  },
+  url: canonical,
+  sameAs: perfil.sociales.map((s) => s.href),
+  knowsAbout: perfil.tecnologias.flatMap((g) => g.items),
+};
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="es-AR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
-    {description && <meta name="description" content={description} />}
 
-    <link rel="icon" href="data:," />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={perfil.nombre} />
+    <link rel="canonical" href={canonical} />
+
+    <meta name="color-scheme" content="light dark" />
+    <meta
+      name="theme-color"
+      content="#ffffff"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#0a0a0a"
+      media="(prefers-color-scheme: dark)"
+    />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,24 +75,63 @@ const { title, description = "" } = Astro.props;
       href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
+
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(jsonLd)}
+    />
   </head>
   <body>
+    <a class="saltar-enlace" href="#contenido">Saltar al contenido</a>
+
     <slot />
 
     <script>
-      // Aparición progresiva de secciones al hacer scroll.
-      const io = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("is-visible");
-              io.unobserve(entry.target);
+      // Aparición progresiva de las secciones al desplazarse.
+      const animables = document.querySelectorAll<HTMLElement>(".reveal");
+      if (
+        window.matchMedia("(prefers-reduced-motion: no-preference)").matches &&
+        "IntersectionObserver" in window
+      ) {
+        const observador = new IntersectionObserver(
+          (entradas) => {
+            for (const entrada of entradas) {
+              if (entrada.isIntersecting) {
+                entrada.target.classList.add("is-visible");
+                observador.unobserve(entrada.target);
+              }
             }
-          }
-        },
-        { rootMargin: "0px 0px -10% 0px" },
-      );
-      document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+          },
+          { rootMargin: "0px 0px -10% 0px" },
+        );
+        animables.forEach((el) => observador.observe(el));
+      } else {
+        animables.forEach((el) => el.classList.add("is-visible"));
+      }
+
+      // Resalta en la barra lateral la sección visible.
+      const secciones = document.querySelectorAll<HTMLElement>("section[id]");
+      const enlacesNav = new Map<string, HTMLAnchorElement>();
+      document
+        .querySelectorAll<HTMLAnchorElement>(".sidebar__nav a[href^='#']")
+        .forEach((a) => enlacesNav.set(a.getAttribute("href")!.slice(1), a));
+
+      if ("IntersectionObserver" in window && secciones.length) {
+        const espia = new IntersectionObserver(
+          (entradas) => {
+            for (const entrada of entradas) {
+              const enlace = enlacesNav.get(entrada.target.id);
+              if (!enlace) continue;
+              if (entrada.isIntersecting) {
+                enlacesNav.forEach((el) => el.removeAttribute("aria-current"));
+                enlace.setAttribute("aria-current", "true");
+              }
+            }
+          },
+          { rootMargin: "-40% 0px -55% 0px" },
+        );
+        secciones.forEach((s) => espia.observe(s));
+      }
     </script>
   </body>
 </html>

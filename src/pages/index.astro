@@ -7,7 +7,7 @@ import { perfil } from "../data/perfil.ts";
 const navItems = [
   { numero: "01", etiqueta: "proyectos", ancla: "proyectos" },
   { numero: "02", etiqueta: "experiencia", ancla: "experiencia" },
-  { numero: "03", etiqueta: "stack", ancla: "stack" },
+  { numero: "03", etiqueta: "tecnologías", ancla: "tecnologias" },
   { numero: "04", etiqueta: "certificaciones", ancla: "certificaciones" },
   { numero: "05", etiqueta: "contacto", ancla: "contacto" },
 ];
@@ -19,30 +19,40 @@ const tituloPagina = `${perfil.nombre} — ${perfil.titular}`;
   <div class="shell" id="top">
     <Sidebar nombre={perfil.nombre} items={navItems} />
 
-    <main class="main">
+    <main class="main" id="contenido">
       <div class="main__inner">
         {/* ---------------------------------------------------- Hero */}
         <header class="hero reveal">
           <p class="label">Perfil profesional</p>
           <h1 class="hero__name mono">{perfil.nombre}</h1>
           <p class="hero__titular">{perfil.titular}</p>
+          {
+            perfil.ubicacion && (
+              <p class="hero__ubicacion label">{perfil.ubicacion}</p>
+            )
+          }
 
           <div class="hero__bio">
             {perfil.presentacion.map((parrafo) => <p>{parrafo}</p>)}
           </div>
 
-          <div class="hero__links">
+          <nav class="hero__links" aria-label="Enlaces de contacto">
             {
               perfil.sociales.map((s) => (
-                <a class="arrow-link" href={s.href} rel="me noopener" target="_blank">
+                <a
+                  class="arrow-link"
+                  href={s.href}
+                  rel="me noopener"
+                  target="_blank"
+                >
                   {s.etiqueta}
                 </a>
               ))
             }
             <a class="arrow-link" href={`mailto:${perfil.email}`}>
-              Correo
+              Correo electrónico
             </a>
-          </div>
+          </nav>
         </header>
 
         {/* ----------------------------------------------- Proyectos */}
@@ -92,11 +102,11 @@ const tituloPagina = `${perfil.nombre} — ${perfil.titular}`;
           </ul>
         </Section>
 
-        {/* --------------------------------------------------- Stack */}
-        <Section numero="03" titulo="stack" ancla="stack">
+        {/* --------------------------------------------- Tecnologías */}
+        <Section numero="03" titulo="tecnologías" ancla="tecnologias">
           <div class="stack">
             {
-              perfil.stack.map((grupo) => (
+              perfil.tecnologias.map((grupo) => (
                 <div class="stack__group">
                   <p class="label">{grupo.titulo}</p>
                   <ul class="stack__items">
@@ -181,6 +191,10 @@ const tituloPagina = `${perfil.nombre} — ${perfil.titular}`;
     font-family: var(--font-mono);
     font-size: 0.9375rem;
     color: var(--color-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .hero__ubicacion {
     margin-bottom: 2rem;
   }
 

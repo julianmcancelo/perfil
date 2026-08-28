@@ -100,6 +100,32 @@ body {
   color: var(--sel-fg);
 }
 
+/* Foco visible y coherente en toda la navegación por teclado. */
+:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+/* Enlace para saltar directamente al contenido (accesibilidad). */
+.saltar-enlace {
+  position: absolute;
+  left: 0.5rem;
+  top: 0.5rem;
+  z-index: 10;
+  transform: translateY(-150%);
+  background: var(--color-text);
+  color: var(--color-bg);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  padding: 0.5rem 0.85rem;
+  transition: transform 0.15s ease;
+}
+
+.saltar-enlace:focus {
+  transform: none;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -191,7 +217,7 @@ h4 {
   }
 }
 
-/* --- Reveal on scroll (progresivo, sin bloquear contenido) - */
+/* --- Aparición progresiva al desplazarse (sin bloquear el contenido) - */
 
 @media (prefers-reduced-motion: no-preference) {
   .reveal {
@@ -202,5 +228,47 @@ h4 {
   .reveal.is-visible {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* Estado activo en la barra lateral (sección visible). */
+.sidebar__nav a[aria-current="true"] {
+  color: var(--color-text);
+}
+
+.sidebar__nav a[aria-current="true"] .sidebar__num {
+  color: var(--color-text);
+}
+
+/* --- Impresión ------------------------------------------- */
+
+@media print {
+  .sidebar,
+  .saltar-enlace,
+  .arrow-link::after {
+    display: none;
+  }
+
+  .shell {
+    display: block;
+  }
+
+  .main {
+    padding: 0;
+    max-width: none;
+  }
+
+  body {
+    color: #000;
+    background: #fff;
+  }
+
+  a {
+    color: #000;
+  }
+
+  .section,
+  .hero {
+    break-inside: avoid;
   }
 }
