@@ -1,0 +1,75 @@
+---
+// Selector de tema: Sistema / Claro / Oscuro.
+// La preferencia se guarda en localStorage bajo la clave "tema".
+---
+
+<div class="tema" role="group" aria-label="Tema de color">
+  <button class="tema__btn" type="button" data-tema="system" aria-pressed="true">
+    Sistema
+  </button>
+  <button class="tema__btn" type="button" data-tema="light" aria-pressed="false">
+    Claro
+  </button>
+  <button class="tema__btn" type="button" data-tema="dark" aria-pressed="false">
+    Oscuro
+  </button>
+</div>
+
+<script>
+  type Tema = "system" | "light" | "dark";
+  const CLAVE = "tema";
+
+  const raiz = document.documentElement;
+  const botones = Array.from(
+    document.querySelectorAll<HTMLButtonElement>(".tema__btn"),
+  );
+  const metaColor = document.querySelectorAll<HTMLMetaElement>(
+    'meta[name="theme-color"]',
+  );
+  const consultaOscuro = window.matchMedia("(prefers-color-scheme: dark)");
+
+  const leer = (): Tema => {
+    try {
+      const v = localStorage.getItem(CLAVE);
+      if (v === "light" || v === "dark" || v === "system") return v;
+    } catch {}
+    return "system";
+  };
+
+  const efectivo = (t: Tema): "light" | "dark" =>
+    t === "system" ? (consultaOscuro.matches ? "dark" : "light") : t;
+
+  const aplicar = (t: Tema, conTransicion = false) => {
+    if (conTransicion) {
+      raiz.classList.add("cambio-tema");
+      window.setTimeout(() => raiz.classList.remove("cambio-tema"), 350);
+    }
+
+    if (t === "system") raiz.removeAttribute("data-theme");
+    else raiz.setAttribute("data-theme", t);
+
+    const color = efectivo(t) === "dark" ? "#0a0a0a" : "#ffffff";
+    metaColor.forEach((m) => m.setAttribute("content", color));
+
+    botones.forEach((b) =>
+      b.setAttribute("aria-pressed", String(b.dataset.tema === t)),
+    );
+  };
+
+  botones.forEach((b) =>
+    b.addEventListener("click", () => {
+      const t = (b.dataset.tema as Tema) ?? "system";
+      try {
+        localStorage.setItem(CLAVE, t);
+      } catch {}
+      aplicar(t, true);
+    }),
+  );
+
+  // Si está en "Sistema", seguir los cambios del sistema operativo en vivo.
+  consultaOscuro.addEventListener("change", () => {
+    if (leer() === "system") aplicar("system", true);
+  });
+
+  aplicar(leer());
+</script>

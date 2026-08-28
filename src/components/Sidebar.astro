@@ -1,4 +1,6 @@
 ---
+import ThemeToggle from "./ThemeToggle.astro";
+
 interface ItemNav {
   numero: string;
   etiqueta: string;
@@ -31,8 +33,34 @@ const { nombre, items } = Astro.props;
         }
       </ul>
     </nav>
+
+    <div class="sidebar__meta">
+      <ThemeToggle />
+      <p class="reloj" aria-live="off">
+        <span class="reloj__etq">Lanús</span>
+        <span class="reloj__hora" data-reloj>--:--</span>
+      </p>
+    </div>
   </div>
 </aside>
+
+<script>
+  // Hora local de Buenos Aires, se refresca cada 30 segundos.
+  const salida = document.querySelector<HTMLElement>("[data-reloj]");
+  if (salida) {
+    const fmt = new Intl.DateTimeFormat("es-AR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+      timeZone: "America/Argentina/Buenos_Aires",
+    });
+    const tick = () => {
+      salida.textContent = fmt.format(new Date());
+    };
+    tick();
+    setInterval(tick, 30_000);
+  }
+</script>
 
 <style>
   .sidebar {

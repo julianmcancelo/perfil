@@ -153,6 +153,15 @@ const tituloPagina = `${perfil.nombre} — ${perfil.titular}`;
             <a class="arrow-link" href={`mailto:${perfil.email}`}>
               {perfil.email}
             </a>
+            <button
+              class="copiar"
+              type="button"
+              data-copiar={perfil.email}
+              data-etq="Copiar"
+              data-etq-ok="Copiado"
+            >
+              Copiar
+            </button>
             {
               perfil.sociales.map((s) => (
                 <a class="arrow-link" href={s.href} rel="me noopener" target="_blank">
@@ -162,6 +171,28 @@ const tituloPagina = `${perfil.nombre} — ${perfil.titular}`;
             }
           </div>
         </Section>
+
+        <script>
+          // Copiar el correo al portapapeles con retorno visual.
+          document
+            .querySelectorAll<HTMLButtonElement>(".copiar[data-copiar]")
+            .forEach((btn) => {
+              btn.addEventListener("click", async () => {
+                const valor = btn.dataset.copiar ?? "";
+                try {
+                  await navigator.clipboard.writeText(valor);
+                  btn.textContent = btn.dataset.etqOk ?? "Copiado";
+                  btn.dataset.estado = "ok";
+                  window.setTimeout(() => {
+                    btn.textContent = btn.dataset.etq ?? "Copiar";
+                    delete btn.dataset.estado;
+                  }, 1800);
+                } catch {
+                  // Sin permiso de portapapeles: no hacer nada.
+                }
+              });
+            });
+        </script>
 
         <footer class="foot">
           {perfil.lema && <p class="foot__lema mono">{perfil.lema}</p>}

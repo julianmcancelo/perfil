@@ -47,11 +47,17 @@
   --sel-fg: #ffffff;
 }
 
+/* Paleta oscura.
+   Se define una sola vez y se reutiliza en dos situaciones:
+   1. El sistema está en modo oscuro y la persona no forzó "claro".
+   2. La persona eligió explícitamente "oscuro" (atributo data-theme). */
+
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
+    color-scheme: dark;
     --bg: 10 10 10;
     --ink: 245 245 245;
-    --g50:  23 23 23;
+    --g50: 23 23 23;
     --g100: 38 38 38;
     --g200: 51 51 51;
     --g300: 64 64 64;
@@ -64,6 +70,43 @@
     --g950: 250 250 250;
     --sel-bg: #fafafa;
     --sel-fg: #0a0a0a;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: 10 10 10;
+  --ink: 245 245 245;
+  --g50: 23 23 23;
+  --g100: 38 38 38;
+  --g200: 51 51 51;
+  --g300: 64 64 64;
+  --g400: 115 115 115;
+  --g500: 150 150 150;
+  --g600: 180 180 180;
+  --g700: 200 200 200;
+  --g800: 224 224 224;
+  --g900: 240 240 240;
+  --g950: 250 250 250;
+  --sel-bg: #fafafa;
+  --sel-fg: #0a0a0a;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* Transición breve al cambiar de tema (se activa por JS y se quita sola). */
+@media (prefers-reduced-motion: no-preference) {
+  html.cambio-tema,
+  html.cambio-tema *,
+  html.cambio-tema *::before,
+  html.cambio-tema *::after {
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease,
+      color 0.3s ease,
+      fill 0.3s ease !important;
   }
 }
 
@@ -150,6 +193,15 @@ h3,
 h4 {
   font-weight: 500;
   line-height: 1.2;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+:target {
+  scroll-margin-top: 2rem;
 }
 
 /* --- Utilidades de rótulo ----------------------------------- */
@@ -240,11 +292,128 @@ h4 {
   color: var(--color-text);
 }
 
+/* --- Barra de progreso de lectura ------------------------ */
+
+.progreso {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background: var(--color-text);
+  z-index: 20;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .progreso {
+    transition: transform 0.1s linear;
+  }
+}
+
+/* --- Selector de tema ------------------------------------ */
+
+.tema {
+  display: inline-flex;
+  border: 1px solid var(--color-line-strong);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.tema__btn {
+  appearance: none;
+  background: transparent;
+  color: var(--color-faint);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  border-right: 1px solid var(--color-line-strong);
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.tema__btn:last-child {
+  border-right: 0;
+}
+
+.tema__btn:hover {
+  color: var(--color-text);
+}
+
+.tema__btn[aria-pressed="true"] {
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+
+/* --- Reloj y utilidades de la barra lateral ------------- */
+
+.sidebar__meta {
+  margin-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.reloj {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.reloj__etq {
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-right: 0.5rem;
+}
+
+.reloj__hora {
+  color: var(--color-muted);
+}
+
+/* --- Copiar al portapapeles ---------------------------- */
+
+.copiar {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+  transition: color 0.15s ease;
+}
+
+.copiar:hover {
+  color: var(--color-text);
+}
+
+.copiar[data-estado="ok"] {
+  color: var(--color-text);
+}
+
+@media (max-width: 60rem) {
+  .sidebar__meta {
+    margin-top: 1.5rem;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.25rem;
+  }
+}
+
 /* --- Impresión ------------------------------------------- */
 
 @media print {
   .sidebar,
   .saltar-enlace,
+  .progreso,
   .arrow-link::after {
     display: none;
   }

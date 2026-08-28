@@ -44,16 +44,25 @@ const jsonLd = {
     <link rel="canonical" href={canonical} />
 
     <meta name="color-scheme" content="light dark" />
-    <meta
-      name="theme-color"
-      content="#ffffff"
-      media="(prefers-color-scheme: light)"
-    />
-    <meta
-      name="theme-color"
-      content="#0a0a0a"
-      media="(prefers-color-scheme: dark)"
-    />
+    <meta name="theme-color" content="#ffffff" />
+
+    {/* Aplica el tema guardado antes del primer pintado (evita parpadeo). */}
+    <script is:inline>
+      (function () {
+        try {
+          var t = localStorage.getItem("tema");
+          var sysDark = window.matchMedia(
+            "(prefers-color-scheme: dark)",
+          ).matches;
+          if (t === "light" || t === "dark") {
+            document.documentElement.setAttribute("data-theme", t);
+          }
+          var dark = t === "dark" || ((!t || t === "system") && sysDark);
+          var m = document.querySelector('meta[name="theme-color"]');
+          if (m) m.setAttribute("content", dark ? "#0a0a0a" : "#ffffff");
+        } catch (e) {}
+      })();
+    </script>
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
@@ -83,8 +92,36 @@ const jsonLd = {
   </head>
   <body>
     <a class="saltar-enlace" href="#contenido">Saltar al contenido</a>
+    <div class="progreso" aria-hidden="true"></div>
 
     <slot />
+
+    <script>
+      // Barra de progreso de lectura.
+      const barra = document.querySelector<HTMLElement>(".progreso");
+      if (barra) {
+        let pendiente = false;
+        const actualizar = () => {
+          const alto =
+            document.documentElement.scrollHeight - window.innerHeight;
+          const razon = alto > 0 ? window.scrollY / alto : 0;
+          barra.style.transform = `scaleX(${Math.min(1, Math.max(0, razon))})`;
+          pendiente = false;
+        };
+        addEventListener(
+          "scroll",
+          () => {
+            if (!pendiente) {
+              pendiente = true;
+              requestAnimationFrame(actualizar);
+            }
+          },
+          { passive: true },
+        );
+        addEventListener("resize", actualizar, { passive: true });
+        actualizar();
+      }
+    </script>
 
     <script>
       // Aparición progresiva de las secciones al desplazarse.
