@@ -5,12 +5,14 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
+    "prebuild": "node scripts/generar-imagenes.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.1",
-    "astro": "^4.16.18"
+    "astro": "^4.16.18",
+    "sharp": "^0.33.5"
   }
 }

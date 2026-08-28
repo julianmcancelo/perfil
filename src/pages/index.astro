@@ -17,12 +17,13 @@ const tituloPagina = `${perfil.nombre} — ${perfil.titular}`;
 
 <Base title={tituloPagina} description={perfil.presentacion[0]}>
   <div class="shell" id="top">
-    <Sidebar nombre={perfil.nombre} items={navItems} />
+    <Sidebar nombre={perfil.nombreCorto ?? perfil.nombre} items={navItems} />
 
     <main class="main" id="contenido">
       <div class="main__inner">
         {/* ---------------------------------------------------- Hero */}
         <header class="hero reveal">
+          <span class="halftone halftone--tr" aria-hidden="true"></span>
           <p class="label">Perfil profesional</p>
           <h1 class="hero__name mono">{perfil.nombre}</h1>
           <p class="hero__titular">{perfil.titular}</p>
@@ -195,6 +196,7 @@ const tituloPagina = `${perfil.nombre} — ${perfil.titular}`;
         </script>
 
         <footer class="foot">
+          <span class="halftone halftone--bl" aria-hidden="true"></span>
           {perfil.lema && <p class="foot__lema mono">{perfil.lema}</p>}
           <p class="label">
             &copy; {new Date().getFullYear()} {perfil.nombre}
@@ -208,7 +210,13 @@ const tituloPagina = `${perfil.nombre} — ${perfil.titular}`;
 <style>
   /* --- Hero ------------------------------------------------- */
   .hero {
+    position: relative;
     padding-bottom: 3.5rem;
+  }
+
+  .hero > :not(.halftone) {
+    position: relative;
+    z-index: 1;
   }
 
   .hero__name {
@@ -394,8 +402,14 @@ const tituloPagina = `${perfil.nombre} — ${perfil.titular}`;
   }
 
   .foot {
-    padding: 3rem 0 0;
+    position: relative;
+    padding: 3rem 0 5rem;
     border-top: 1px solid var(--color-line);
+  }
+
+  .foot > :not(.halftone) {
+    position: relative;
+    z-index: 1;
   }
 
   .foot__lema {

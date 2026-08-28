@@ -41,6 +41,7 @@ export interface Certificacion {
 
 export interface Perfil {
   nombre: string;
+  nombreCorto?: string;
   titular: string;
   presentacion: string[];
   ubicacion?: string;
@@ -55,6 +56,7 @@ export interface Perfil {
 
 export const perfil: Perfil = {
   nombre: "Julián Manuel Cancelo",
+  nombreCorto: "Julián Cancelo",
   titular: "Desarrollador back-end · Analista funcional · Ciberdefensa",
   presentacion: [
     "Desarrollador con orientación al back-end, radicado en Lanús, provincia de Buenos Aires. Trabajo principalmente con TypeScript y Node.js, construyo interfaces con Next.js y React, y desarrollo aplicaciones móviles con Flutter y React Native.",

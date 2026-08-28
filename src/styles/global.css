@@ -218,6 +218,59 @@ p {
   font-family: var(--font-mono);
 }
 
+/* --- Trama de puntos (halftone) ---------------------------- */
+/* Textura decorativa: rejilla de puntos que usa la tinta actual,
+   por lo que se adapta sola al modo claro y oscuro. Se enmascara
+   con un degradado para que se desvanezca hacia un borde. */
+
+.halftone {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  background-image: radial-gradient(
+    circle,
+    rgb(var(--ink) / 0.85) 1px,
+    transparent 1.7px
+  );
+  background-size: 11px 11px;
+  opacity: 0.32;
+}
+
+.halftone--tr {
+  top: 0;
+  right: 0;
+  width: 16rem;
+  height: 12rem;
+  -webkit-mask-image: radial-gradient(
+    120% 120% at 100% 0%,
+    #000 0%,
+    transparent 70%
+  );
+  mask-image: radial-gradient(120% 120% at 100% 0%, #000 0%, transparent 70%);
+}
+
+.halftone--bl {
+  bottom: 0;
+  left: 0;
+  width: 14rem;
+  height: 10rem;
+  -webkit-mask-image: radial-gradient(
+    120% 120% at 0% 100%,
+    #000 0%,
+    transparent 70%
+  );
+  mask-image: radial-gradient(120% 120% at 0% 100%, #000 0%, transparent 70%);
+}
+
+@media (max-width: 60rem) {
+  .halftone--tr,
+  .halftone--bl {
+    width: 9rem;
+    height: 7rem;
+    opacity: 0.2;
+  }
+}
+
 /* --- Enlace con marcador ↗ --------------------------------- */
 
 .arrow-link {
