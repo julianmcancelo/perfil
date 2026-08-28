@@ -1,0 +1,366 @@
+---
+import Base from "../layouts/Base.astro";
+import Sidebar from "../components/Sidebar.astro";
+import Section from "../components/Section.astro";
+import { perfil } from "../data/perfil.ts";
+
+const navItems = [
+  { numero: "01", etiqueta: "proyectos", ancla: "proyectos" },
+  { numero: "02", etiqueta: "experiencia", ancla: "experiencia" },
+  { numero: "03", etiqueta: "stack", ancla: "stack" },
+  { numero: "04", etiqueta: "certificaciones", ancla: "certificaciones" },
+  { numero: "05", etiqueta: "contacto", ancla: "contacto" },
+];
+
+const tituloPagina = `${perfil.nombre} — ${perfil.titular}`;
+---
+
+<Base title={tituloPagina} description={perfil.presentacion[0]}>
+  <div class="shell" id="top">
+    <Sidebar nombre={perfil.nombre} items={navItems} />
+
+    <main class="main">
+      <div class="main__inner">
+        {/* ---------------------------------------------------- Hero */}
+        <header class="hero reveal">
+          <p class="label">Perfil profesional</p>
+          <h1 class="hero__name mono">{perfil.nombre}</h1>
+          <p class="hero__titular">{perfil.titular}</p>
+
+          <div class="hero__bio">
+            {perfil.presentacion.map((parrafo) => <p>{parrafo}</p>)}
+          </div>
+
+          <div class="hero__links">
+            {
+              perfil.sociales.map((s) => (
+                <a class="arrow-link" href={s.href} rel="me noopener" target="_blank">
+                  {s.etiqueta}
+                </a>
+              ))
+            }
+            <a class="arrow-link" href={`mailto:${perfil.email}`}>
+              Correo
+            </a>
+          </div>
+        </header>
+
+        {/* ----------------------------------------------- Proyectos */}
+        <Section numero="01" titulo="proyectos" ancla="proyectos">
+          <ul class="list">
+            {
+              perfil.proyectos.map((p) => (
+                <li class="entry">
+                  {p.etiquetas && p.etiquetas.length > 0 && (
+                    <p class="entry__tags">
+                      {p.etiquetas.map((t) => (
+                        <span class="tag">{t}</span>
+                      ))}
+                    </p>
+                  )}
+                  <h3 class="entry__title mono">
+                    {p.href ? (
+                      <a class="entry__link" href={p.href} target="_blank" rel="noopener">
+                        {p.nombre}
+                      </a>
+                    ) : (
+                      p.nombre
+                    )}
+                  </h3>
+                  <p class="entry__desc">{p.descripcion}</p>
+                </li>
+              ))
+            }
+          </ul>
+        </Section>
+
+        {/* --------------------------------------------- Experiencia */}
+        <Section numero="02" titulo="experiencia" ancla="experiencia">
+          <ul class="timeline">
+            {
+              perfil.experiencia.map((e) => (
+                <li class="timeline__row">
+                  <span class="timeline__year mono">{e.anio}</span>
+                  <span class="timeline__body">
+                    <span class="timeline__role">{e.rol}</span>
+                    <span class="timeline__org">{e.organizacion}</span>
+                    {e.detalle && <span class="timeline__detail">{e.detalle}</span>}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </Section>
+
+        {/* --------------------------------------------------- Stack */}
+        <Section numero="03" titulo="stack" ancla="stack">
+          <div class="stack">
+            {
+              perfil.stack.map((grupo) => (
+                <div class="stack__group">
+                  <p class="label">{grupo.titulo}</p>
+                  <ul class="stack__items">
+                    {grupo.items.map((item) => (
+                      <li class="tag">{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            }
+          </div>
+        </Section>
+
+        {/* ----------------------------------------- Certificaciones */}
+        <Section numero="04" titulo="certificaciones" ancla="certificaciones">
+          <ul class="list">
+            {
+              perfil.certificaciones.map((c) => (
+                <li class="cert">
+                  <div>
+                    <h3 class="cert__name mono">{c.nombre}</h3>
+                    <p class="cert__issuer label">{c.emisor}</p>
+                  </div>
+                  {c.href ? (
+                    <a class="arrow-link" href={c.href} target="_blank" rel="noopener">
+                      Verificar
+                    </a>
+                  ) : (
+                    c.estado && <span class="cert__estado label">{c.estado}</span>
+                  )}
+                </li>
+              ))
+            }
+          </ul>
+        </Section>
+
+        {/* ------------------------------------------------ Contacto */}
+        <Section numero="05" titulo="contacto" ancla="contacto">
+          <p class="contact__lead">
+            Para consultas profesionales o propuestas de colaboración, la vía más
+            directa es el correo electrónico.
+          </p>
+          <div class="hero__links">
+            <a class="arrow-link" href={`mailto:${perfil.email}`}>
+              {perfil.email}
+            </a>
+            {
+              perfil.sociales.map((s) => (
+                <a class="arrow-link" href={s.href} rel="me noopener" target="_blank">
+                  {s.etiqueta}
+                </a>
+              ))
+            }
+          </div>
+        </Section>
+
+        <footer class="foot">
+          {perfil.lema && <p class="foot__lema mono">{perfil.lema}</p>}
+          <p class="label">
+            &copy; {new Date().getFullYear()} {perfil.nombre}
+          </p>
+        </footer>
+      </div>
+    </main>
+  </div>
+</Base>
+
+<style>
+  /* --- Hero ------------------------------------------------- */
+  .hero {
+    padding-bottom: 3.5rem;
+  }
+
+  .hero__name {
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    margin: 0.75rem 0 0.5rem;
+  }
+
+  .hero__titular {
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+    color: var(--color-muted);
+    margin-bottom: 2rem;
+  }
+
+  .hero__bio {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 34rem;
+    color: rgb(var(--g700));
+  }
+
+  .hero__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem 1.75rem;
+    margin-top: 2rem;
+  }
+
+  /* --- Listas y entradas ---------------------------------- */
+  .list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .entry {
+    padding: 1.75rem 0;
+    border-top: 1px solid var(--color-line);
+  }
+  .entry:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .entry__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    border: 1px solid var(--color-line-strong);
+    border-radius: 2px;
+    padding: 0.15rem 0.5rem;
+  }
+
+  .entry__title {
+    font-size: 1.0625rem;
+    font-weight: 400;
+    margin-bottom: 0.4rem;
+  }
+
+  .entry__link {
+    text-decoration: underline;
+    text-decoration-color: var(--color-line-strong);
+    text-underline-offset: 3px;
+  }
+  .entry__link:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .entry__desc {
+    color: rgb(var(--g600));
+    max-width: 34rem;
+  }
+
+  /* --- Timeline ------------------------------------------- */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .timeline__row {
+    display: grid;
+    grid-template-columns: 4rem 1fr;
+    gap: 1.5rem;
+    padding: 1.25rem 0;
+    border-top: 1px solid var(--color-line);
+  }
+  .timeline__row:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .timeline__year {
+    font-size: 0.8125rem;
+    color: var(--color-faint);
+    font-variant-numeric: tabular-nums;
+    padding-top: 0.15rem;
+  }
+
+  .timeline__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .timeline__role {
+    font-weight: 500;
+  }
+
+  .timeline__org {
+    color: var(--color-muted);
+    font-size: 0.9375rem;
+  }
+
+  .timeline__detail {
+    color: rgb(var(--g600));
+    font-size: 0.9375rem;
+    margin-top: 0.35rem;
+  }
+
+  /* --- Stack --------------------------------------------- */
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .stack__group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .stack__items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  /* --- Certificaciones ---------------------------------- */
+  .cert {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.25rem 0;
+    border-top: 1px solid var(--color-line);
+  }
+  .cert:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .cert__name {
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 0.35rem;
+  }
+
+  .cert__issuer {
+    color: var(--color-muted);
+  }
+
+  /* --- Contacto / footer -------------------------------- */
+  .contact__lead {
+    color: rgb(var(--g700));
+    max-width: 34rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .foot {
+    padding: 3rem 0 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .foot__lema {
+    font-size: 0.8125rem;
+    color: var(--color-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .cert__estado {
+    white-space: nowrap;
+    padding-top: 0.15rem;
+  }
+</style>

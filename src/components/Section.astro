@@ -1,0 +1,51 @@
+---
+interface Props {
+  numero: string;
+  titulo: string;
+  ancla: string;
+  hrefTodos?: string;
+  etiquetaTodos?: string;
+}
+
+const { numero, titulo, ancla, hrefTodos, etiquetaTodos = "Ver todo" } =
+  Astro.props;
+---
+
+<section id={ancla} class="section reveal">
+  <header class="section__head">
+    <h2 class="section__title mono">{numero} &mdash; {titulo}</h2>
+    {
+      hrefTodos && (
+        <a class="arrow-link" href={hrefTodos}>
+          {etiquetaTodos}
+        </a>
+      )
+    }
+  </header>
+
+  <div class="section__body">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section {
+    padding: 3.5rem 0;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .section__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .section__title {
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: var(--color-text);
+  }
+</style>

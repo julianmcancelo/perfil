@@ -1,0 +1,206 @@
+/* ============================================================
+   Perfil — sistema de diseño
+   Estética monocroma, editorial y técnica.
+   Inspirada en la sobriedad tipográfica de referencias como
+   bryllim.com: blanco puro, tinta casi negra, escala de grises
+   neutra, tipografía monoespaciada para rótulos y titulares.
+   ============================================================ */
+
+:root {
+  /* Superficie y tinta */
+  --bg: 255 255 255;
+  --ink: 10 10 10;
+
+  /* Escala de grises neutra */
+  --g50:  250 250 250;
+  --g100: 245 245 245;
+  --g200: 233 233 233;
+  --g300: 212 212 212;
+  --g400: 163 163 163;
+  --g500: 115 115 115;
+  --g600: 82 82 82;
+  --g700: 64 64 64;
+  --g800: 38 38 38;
+  --g900: 23 23 23;
+  --g950: 10 10 10;
+
+  /* Roles semánticos */
+  --color-bg: rgb(var(--bg));
+  --color-text: rgb(var(--ink));
+  --color-muted: rgb(var(--g500));
+  --color-faint: rgb(var(--g400));
+  --color-line: rgb(var(--g200));
+  --color-line-strong: rgb(var(--g300));
+  --color-surface: rgb(var(--g50));
+
+  /* Tipografía */
+  --font-sans: "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", "Menlo", "Consolas", monospace;
+
+  /* Métrica */
+  --sidebar-w: 15rem;
+  --content-w: 40rem;
+  --gutter: 2rem;
+
+  /* Selección */
+  --sel-bg: #0a0a0a;
+  --sel-fg: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: 10 10 10;
+    --ink: 245 245 245;
+    --g50:  23 23 23;
+    --g100: 38 38 38;
+    --g200: 51 51 51;
+    --g300: 64 64 64;
+    --g400: 115 115 115;
+    --g500: 150 150 150;
+    --g600: 180 180 180;
+    --g700: 200 200 200;
+    --g800: 224 224 224;
+    --g900: 240 240 240;
+    --g950: 250 250 250;
+    --sel-bg: #fafafa;
+    --sel-fg: #0a0a0a;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0 solid var(--color-line);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--sel-bg);
+  color: var(--sel-fg);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+picture,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* --- Utilidades de rótulo ----------------------------------- */
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-faint);
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* --- Enlace con marcador ↗ --------------------------------- */
+
+.arrow-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3em;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  transition: color 0.15s ease;
+}
+
+.arrow-link::after {
+  content: "\2197"; /* ↗ */
+  font-size: 0.9em;
+}
+
+.arrow-link:hover {
+  color: var(--color-text);
+}
+
+/* --- Layout raíz ------------------------------------------- */
+
+.shell {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+@media (max-width: 60rem) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+}
+
+.main {
+  padding: 7rem var(--gutter) 6rem;
+}
+
+.main__inner {
+  max-width: var(--content-w);
+}
+
+@media (max-width: 60rem) {
+  .main {
+    padding: 2.5rem 1.5rem 4rem;
+  }
+}
+
+/* --- Reveal on scroll (progresivo, sin bloquear contenido) - */
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(0.75rem);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
